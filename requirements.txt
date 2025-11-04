@@ -1,0 +1,13 @@
+torch>=2.0.0
+torchvision
+pillow
+requests
+numpy<2
+scipy
+scikit-image
+timm
+kornia
+einops
+tqdm
+prettytable
+tabulate
