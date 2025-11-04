@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # ✅ Preload BiRefNet model (download from Hugging Face)
 RUN curl -L -o BiRefNet_model.safetensors \
-    https://huggingface.co/zaidulhassan79/BiRefNet/resolve/main/BiRefNet_model.safetensors
+    https://huggingface.co/zaidulhassan79/load/resolve/main/model.safetensors
 
 # Set environment variable for RunPod
 ENV PORT=8000
