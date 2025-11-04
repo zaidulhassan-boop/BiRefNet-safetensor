@@ -3,11 +3,12 @@ import base64
 import torch
 from PIL import Image
 import requests
-from models.birefnet import BiRefNet  # make sure models folder is copied
+from models.birefnet import BiRefNet
 import torchvision.transforms as transforms
+import os
+import runpod  # ✅ Make sure this is also in requirements.txt
 
 # === Download model if not exists ===
-import os
 model_path = "BiRefNet_model.safetensors"
 if not os.path.exists(model_path):
     url = "https://huggingface.co/zaidulhassan79/BiRefNet/resolve/main/BiRefNet_model.safetensors"
@@ -62,7 +63,11 @@ def handler(event):
         image.save(buf, format="PNG")
         base64_output = base64.b64encode(buf.getvalue()).decode("utf-8")
 
-        return {"output_image": base64_output}
+        # ✅ Return using key RunPod expects
+        return {"output": base64_output}
 
     except Exception as e:
         return {"error": str(e)}
+
+# === ✅ Required by RunPod Serverless ===
+runpod.serverless.start({"handler": handler})
