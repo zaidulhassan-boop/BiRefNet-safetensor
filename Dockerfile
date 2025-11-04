@@ -1,20 +1,24 @@
-# Use lightweight PyTorch GPU image
+# Use lightweight PyTorch image with CUDA runtime
 FROM pytorch/pytorch:2.1.0-cuda11.8-cudnn8-runtime
 
+# Set working directory
 WORKDIR /workspace
 
-# Copy project files
+# Copy all project files into container
 COPY . .
 
-# Install dependencies
+# Install wget (needed for model download) and clean up after
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Preload model from Hugging Face (your direct resolve link)
+# Preload model from Hugging Face to avoid cold-start delay
 RUN wget -O BiRefNet_model.safetensors \
     https://huggingface.co/zaidulhassan79/BiRefNet/resolve/main/BiRefNet_model.safetensors
 
-# Set environment variable for RunPod
+# Expose port for RunPod
 ENV PORT=8000
 
-# Command for RunPod serverless
+# Run the handler script when container starts
 CMD ["python", "handler.py"]
